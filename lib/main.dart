@@ -1,7 +1,11 @@
 import 'package:alcool_gasolina/widgets/input.widget.dart';
+import 'package:alcool_gasolina/widgets/loading-button.widget.dart';
 import 'package:alcool_gasolina/widgets/logo.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+
+import 'widgets/submit-form.dart';
+import 'widgets/sucess.widget.dart';
 
 void main() => runApp(MyApp());
 
@@ -31,13 +35,11 @@ class HomePage extends StatelessWidget {
       body: ListView(
         children: <Widget>[
           Logo(),
-          Input(
-            ctrl: _gasCtrl,
-            label: "Gasolina",
-          ),
-          Input(
-            ctrl: _alcCtrl,
-            label: "Álcool",
+          SubmitForm(
+            alcCtrl: _alcCtrl,
+            gasCtrl: _alcCtrl,
+            busy: false,
+            submitFunc: () {},
           ),
         ],
       ),
