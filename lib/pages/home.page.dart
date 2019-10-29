@@ -1,25 +1,24 @@
 import 'package:alcool_gasolina/widgets/logo.widget.dart';
 import 'package:alcool_gasolina/widgets/submit-form.dart';
+import 'package:alcool_gasolina/widgets/sucess.widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 
-class MyApp extends StatelessWidget {
+class HomePage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Alcool ou Gasolina',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-      ),
-      home: HomePage(),
-    );
-  }
+  _HomePageState createState() => _HomePageState();
 }
 
-class HomePage extends StatelessWidget {
+class _HomePageState extends State<HomePage> {
   var _gasCtrl = new MoneyMaskedTextController();
+
   var _alcCtrl = new MoneyMaskedTextController();
+
+  var _busy = false;
+
+  var _completed = false;
+
+  var _resultText = "Compensa utilizar alcool";
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +28,31 @@ class HomePage extends StatelessWidget {
       body: ListView(
         children: <Widget>[
           Logo(),
-          SubmitForm(
-            alcCtrl: _alcCtrl,
-            gasCtrl: _alcCtrl,
-            busy: false,
-            submitFunc: () {},
-          ),
+          _completed
+              ? Sucess(
+                  reset: () {},
+                  result: "$_resultText",
+                )
+              : SubmitForm(
+                  alcCtrl: _alcCtrl,
+                  gasCtrl: _gasCtrl,
+                  busy: _busy,
+                  submitFunc: calculate,
+                ),
         ],
       ),
     );
+  }
+
+  Future calculate() {
+    double alc =
+        double.parse(_alcCtrl.text.replaceAll(new RegExp(r'[,.]'), '')) / 100;
+    double gas =
+        double.parse(_gasCtrl.text.replaceAll(new RegExp(r'[,.]'), '')) / 100;
+    double res = alc / gas;
+    setState(() {
+      _completed = false;
+      _busy = true;
+    });
   }
 }
