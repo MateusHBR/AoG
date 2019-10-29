@@ -3,7 +3,8 @@ import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class Input extends StatelessWidget {
   var label = "";
-  var ctrl = MoneyMaskedTextController();
+  var ctrl =
+      MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.');
   Input({
     @required this.label,
     @required this.ctrl,

@@ -5,8 +5,16 @@ import 'input.widget.dart';
 import 'loading-button.widget.dart';
 
 class SubmitForm extends StatelessWidget {
-  var gasCtrl = new MoneyMaskedTextController();
-  var alcCtrl = new MoneyMaskedTextController();
+  var gasCtrl = new MoneyMaskedTextController(
+    decimalSeparator: ',',
+    thousandSeparator: '.',
+    precision: 3,
+  );
+  var alcCtrl = new MoneyMaskedTextController(
+    decimalSeparator: ',',
+    thousandSeparator: '.',
+    precision: 3,
+  );
   var busy = false;
   Function submitFunc;
 

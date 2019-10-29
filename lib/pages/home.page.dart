@@ -10,14 +10,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var _gasCtrl = new MoneyMaskedTextController();
-
-  var _alcCtrl = new MoneyMaskedTextController();
-
+  var _gasCtrl = new MoneyMaskedTextController(
+    decimalSeparator: ',',
+    thousandSeparator: '.',
+    precision: 3,
+  );
+  var _alcCtrl = new MoneyMaskedTextController(
+    decimalSeparator: ',',
+    thousandSeparator: '.',
+    precision: 3,
+  );
   var _busy = false;
-
   var _completed = false;
-
   var _resultText = "Compensa utilizar alcool";
 
   @override
@@ -25,21 +29,26 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor:
           Theme.of(context).primaryColor, // utilizar a cor primaria
-      body: ListView(
-        children: <Widget>[
-          Logo(),
-          _completed
-              ? Sucess(
-                  reset: () {},
-                  result: "$_resultText",
-                )
-              : SubmitForm(
-                  alcCtrl: _alcCtrl,
-                  gasCtrl: _gasCtrl,
-                  busy: _busy,
-                  submitFunc: calculate,
-                ),
-        ],
+      body: new GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
+        child: ListView(
+          children: <Widget>[
+            Logo(),
+            _completed
+                ? Sucess(
+                    reset: reset,
+                    result: "$_resultText",
+                  )
+                : SubmitForm(
+                    alcCtrl: _alcCtrl,
+                    gasCtrl: _gasCtrl,
+                    busy: _busy,
+                    submitFunc: calculate,
+                  ),
+          ],
+        ),
       ),
     );
   }
@@ -53,6 +62,35 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _completed = false;
       _busy = true;
+    });
+    return new Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        if (res > 0.66) {
+          _resultText = "Compensa utilizar Gasolina!";
+        } else {
+          _resultText = "Compensa utilizar Álcool!";
+        }
+
+        _busy = false;
+        _completed = true;
+      });
+    });
+  }
+
+  reset() {
+    setState(() {
+      _alcCtrl = new MoneyMaskedTextController(
+        decimalSeparator: ',',
+        thousandSeparator: '.',
+        precision: 3,
+      );
+      _gasCtrl = new MoneyMaskedTextController(
+        decimalSeparator: ',',
+        thousandSeparator: '.',
+        precision: 3,
+      );
+      _completed = false;
+      _busy = false;
     });
   }
 }
