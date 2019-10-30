@@ -10,6 +10,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Color _color = Colors.deepPurple;
   var _gasCtrl = new MoneyMaskedTextController(
     decimalSeparator: ',',
     thousandSeparator: '.',
@@ -29,25 +30,29 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor:
           Theme.of(context).primaryColor, // utilizar a cor primaria
-      body: new GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-        },
-        child: ListView(
-          children: <Widget>[
-            Logo(),
-            _completed
-                ? Sucess(
-                    reset: reset,
-                    result: "$_resultText",
-                  )
-                : SubmitForm(
-                    alcCtrl: _alcCtrl,
-                    gasCtrl: _gasCtrl,
-                    busy: _busy,
-                    submitFunc: calculate,
-                  ),
-          ],
+      body: AnimatedContainer(
+        duration: Duration(milliseconds: 1200),
+        color: _color,
+        child: new GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+          },
+          child: ListView(
+            children: <Widget>[
+              Logo(),
+              _completed
+                  ? Sucess(
+                      reset: reset,
+                      result: "$_resultText",
+                    )
+                  : SubmitForm(
+                      alcCtrl: _alcCtrl,
+                      gasCtrl: _gasCtrl,
+                      busy: _busy,
+                      submitFunc: calculate,
+                    ),
+            ],
+          ),
         ),
       ),
     );
@@ -60,6 +65,7 @@ class _HomePageState extends State<HomePage> {
         double.parse(_gasCtrl.text.replaceAll(new RegExp(r'[,.]'), '')) / 100;
     double res = alc / gas;
     setState(() {
+      _color = Colors.deepPurpleAccent;
       _completed = false;
       _busy = true;
     });
@@ -91,6 +97,7 @@ class _HomePageState extends State<HomePage> {
       );
       _completed = false;
       _busy = false;
+      _color = Colors.deepPurple;
     });
   }
 }
